@@ -1,0 +1,23 @@
+#version 420
+
+layout(location = 0) in vec4 vertex;
+
+layout(location = 1) in vec2 UV;
+
+layout (location = 2) in vec3 normals;
+
+uniform mat4 view;
+
+uniform mat4 frustrum;
+
+uniform mat4 model;
+
+out vec2 textureUV;
+
+void main()
+{
+	
+	textureUV = UV;
+	gl_Position = frustrum * view * model * vertex;
+	
+}

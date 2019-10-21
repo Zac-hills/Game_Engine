@@ -1,0 +1,12 @@
+#version 420
+
+uniform sampler2D texture1;
+
+in vec2 textureUV;
+
+out vec3 outColor;
+
+void main()
+{
+	outColor = texture(texture1, textureUV).xyz;
+}

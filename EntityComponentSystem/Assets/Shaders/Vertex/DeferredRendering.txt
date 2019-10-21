@@ -1,0 +1,28 @@
+#version 420
+
+layout(location = 0) in vec4 vertex;
+
+layout(location = 1) in vec2 UV;
+
+layout (location = 2) in vec3 normals;
+
+uniform mat4 view;
+
+uniform mat4 frustrum;
+
+uniform mat4 model;
+
+out vec2 textureUV;
+out vec3 norm;
+out vec3 pos;
+
+
+void main()
+{
+	textureUV = UV;
+	//convert normal to view space
+	norm = mat3(view) * mat3(model) * normals;
+	//convert vertex to viewspace
+	pos = (view * model * vertex).xyz;
+	gl_Position = frustrum * vec4(pos, 1.0f);
+}

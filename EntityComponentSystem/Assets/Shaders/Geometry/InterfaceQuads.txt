@@ -1,0 +1,38 @@
+#version 420
+
+layout (points) in;
+layout (triangle_strip) out;
+layout (max_vertices = 4) out;
+
+//centre of quad//
+uniform vec2 Position;
+//x=width, y=height, in screenspace -1 - 1//
+uniform vec2 Size;
+
+out vec2 textureUV;
+
+void main()
+{
+	//first vertex
+	textureUV = vec2(0.0f, 0.0f);
+	gl_Position = vec4(Position.x - Size.x, Position.y - Size.y, 0.0f, 1.0f);
+	EmitVertex();
+
+	//second vertex
+	textureUV = vec2(1.0f, 0.0f);
+	gl_Position = vec4(Position.x + Size.x, Position.y - Size.y, 0.0f, 1.0f);
+	EmitVertex();
+
+	//third vertex
+	textureUV = vec2(0.0f, 1.0f);
+	gl_Position = vec4(Position.x - Size.x, Position.y + Size.y, 0.0f, 1.0f);	
+	EmitVertex();
+
+	//Fourth vertex
+	textureUV = vec2(1.0f, 1.0f);
+	gl_Position = vec4(Position.x + Size.x, Position.y + Size.y, 0.0f, 1.0f);
+	EmitVertex();
+	
+	EndPrimitive();
+}
+

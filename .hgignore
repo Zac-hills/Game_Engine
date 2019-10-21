@@ -1,0 +1,20 @@
+syntax: glob
+*.sdf
+*.opensdf
+*.suo
+Debug/
+*.exp
+*.pdb
+*.log
+*.ipch
+*.db
+*.obj
+*.db-shm
+*.db-wal
+*.opendb
+*.tlog
+*.lastbuildstate
+*.unsucessfulbuild
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/ProjectSettings.json

@@ -1,0 +1,15 @@
+#version 420
+
+uniform sampler2D tex;
+uniform vec3 unique_ID;
+
+in vec2 textureUV;
+
+layout(location = 0)out vec4 outColor;
+layout(location = 3)out vec3 outSelection;
+
+void main()
+{
+	outColor = texture(tex, textureUV).rgba;
+	outSelection = unique_ID;
+}
