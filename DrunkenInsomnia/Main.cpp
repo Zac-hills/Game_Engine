@@ -43,6 +43,15 @@ void print(int i)
 	std::cout << i << std::endl;
 }
 
+class t{
+public:
+	void print(const MouseEvent & e) 
+	{
+		std::cout << "test";
+		windowManager::getWindowManager().mouse.unsubscribeLeftClickDown(*this);
+	}
+};
+
 int main()
 {
 	File file("./Shaders/VertexShader/FullScreenQuad.vert");
@@ -64,7 +73,10 @@ int main()
 	FragmentShader fs = Load<FragmentShader>("Texture.frag");
 	VertexShader vs1 = Load<VertexShader>("Interface.vert");
 	FragmentShader fs1 = Load<FragmentShader>("Texture.frag");
-	
+	t testtt;
+	t testt;
+	windowManager::getWindowManager().mouse.subscribeLeftClickDown(std::bind(&t::print, &testtt, std::placeholders::_1), testtt);
+	windowManager::getWindowManager().mouse.subscribeLeftClickDown(std::bind(&t::print, &testt, std::placeholders::_1), testt);
 	Program pp;
 	pp.AddShader(fs);
 	pp.AddShader(vs);

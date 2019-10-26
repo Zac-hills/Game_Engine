@@ -149,6 +149,7 @@ LRESULT CALLBACK WndProc(HWND	hWnd,			// Handle For This Window
 
 	case WM_LBUTTONDOWN :
 	{
+		windowManager::getWindowManager().mouse.callLeftClickDown(MouseEvent(1,1));
 		std::cout << "Mouse Down" << std::endl;
 		return 0;
 	}

@@ -7,103 +7,140 @@ class Mouse
 {
 public:
 	template<typename T>
-	void subscribeLeftClickUp(std::function<void(const MouseEvent&)> function, T& object) 
+	void subscribeLeftClickUp(std::function<void(const MouseEvent&)> function,const T& object) 
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::LEFT]);
-		leftClick[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_UP]);
+		leftClickUp[(int)&object] = function;
 	}
 	template<typename T>
-	void subscribeLeftClickDown(std::function<void(const MouseEvent&)> function, T& object)
+	void unsubscribeLeftClickUp(const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::LEFT]);
-		leftClick[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_UP]);
+		if (leftClickUp.find(((int)&object)) != leftClickUp.end())
+		{
+			leftClickUp.erase((int)&object);
+		}
 	}
 	template<typename T>
-	void subscribeRightClickUp(std::function<void(const MouseEvent&)> function, T& object)
+	void subscribeLeftClickDown(std::function<void(const MouseEvent&)> function, const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::RIGHT]);
-		rightClick[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_DOWN]);
+		leftClickDown[(int)&object] = function;
 	}
 	template<typename T>
-	void subscribeRightClickDown(std::function<void(const MouseEvent&)> function, T& object)
+	void unsubscribeLeftClickDown(const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::RIGHT]);
-		rightClick[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_DOWN]);
+		if (leftClickDown.find((int)&object) != leftClickDown.end())
+		{
+			leftClickDown.erase((int)&object);
+		}
 	}
 	template<typename T>
-	void subscribeMiddleClick(std::function<void(const MouseEvent&)> function, T& object)
+	void subscribeRightClickUp(std::function<void(const MouseEvent&)> function, const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::MIDDLE]);
-		middle[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::RIGHT_UP]);
+		rightClickDown[(int)&object] = function;
 	}
 	template<typename T>
-	void subscribeScroll(std::function<void(const MouseEvent&)> function, T& object)
+	void subscribeRightClickDown(std::function<void(const MouseEvent&)> function, const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::SCROLL]);
-		scroll[&object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::RIGHT_DOWN]);
+		rightClickUp[(int)&object] = function;
+	}
+
+	template<typename T>
+	void subscribeMiddleClick(std::function<void(const MouseEvent&)> function, const T& object)
+	{
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::MIDDLE]);
+		middle[(int)&object] = function;
 	}
 	template<typename T>
-	void subscribeMove(std::function<void(const MouseEvent&)> function, T& object)
+	void subscribeScroll(std::function<void(const MouseEvent&)> function, const T& object)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::MOVE]);
-		move[object] = function;
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::SCROLL]);
+		scroll[(int)&object] = function;
+	}
+	template<typename T>
+	void subscribeMove(std::function<void(const MouseEvent&)> function, const T& object)
+	{
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::MOVE]);
+		move[(int)&object] = function;
 	}
 
 	void callMove(const MouseEvent& event) 
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::MOVE]);
-		for (auto& it : move) 
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::MOVE]);
+		auto &it= move.begin();
+		while (it != move.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 	void callScroll(const MouseEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::SCROLL]);
-		for (auto& it : scroll)
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::SCROLL]);
+		auto &it=scroll.begin();
+		while (it != scroll.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 	void callLeftClickUp(const MouseEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::LEFT]);
-		for (auto& it : leftClickUp)
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_UP]);
+		auto &it =leftClickUp.begin();
+		while (it != leftClickUp.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 	void callLeftClickDown(const MouseEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::LEFT]);
-		for (auto& it : leftClickDown)
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::LEFT_DOWN]);
+		auto &it = leftClickDown.begin();
+		while(it !=leftClickDown.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 	void callRightClickUp(const MouseEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::RIGHT]);
-		for (auto& it : rightClickUp)
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::RIGHT_UP]);
+		auto &it= rightClickUp.begin();
+		while (it != rightClickUp.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 	void callRightClickDown(const MouseEvent& event)
 	{
-		std::lock_guard<std::mutex> lock(mutex[container::RIGHT]);
-		for (auto& it : rightClickDown)
+		std::lock_guard<std::recursive_mutex> lock(mutex[container::RIGHT_DOWN]);
+		auto &it =rightClickDown.begin();
+		while (it != rightClickUp.end())
 		{
-			it.second(event);
+			auto next = std::next(it, 1);
+			it->second(event);
+			it = next;
 		}
 	}
 
 private:
 	enum container
 	{
-		LEFT = 0, RIGHT = 1, SCROLL = 2, MOVE = 3, MIDDLE=4
+		LEFT_DOWN = 0, LEFT_UP=1, RIGHT_DOWN = 2, RIGHT_UP=3, SCROLL = 4, MOVE = 5, MIDDLE=6
 	};
-	std::mutex mutex[5];
+	std::recursive_mutex mutex[7];
 	std::unordered_map<int, std::function<void(const MouseEvent&)>> leftClickUp;
 	std::unordered_map<int, std::function<void(const MouseEvent&)>> rightClickUp;
 	std::unordered_map<int, std::function<void(const MouseEvent&)>> leftClickDown;
