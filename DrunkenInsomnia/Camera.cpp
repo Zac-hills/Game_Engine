@@ -7,7 +7,7 @@ mat4 Camera::GetProjectionMatrix() const
 
 mat4 Camera::GetViewMatrix() const 
 {
-	return m_Transform.GetLocal();
+	return m_Transform.getLocal();
 }
 
 void Camera::SetProjection(const float a_right, const float a_left, const float a_top, const float a_bottom, const float a_near, const float a_far)

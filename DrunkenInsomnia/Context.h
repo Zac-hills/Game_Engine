@@ -43,7 +43,9 @@ public:
 		glBindFramebuffer(a_Target, a_BufferID);
 	}	
 	~FrameBufferContext() { glBindFramebuffer(m_Target, NULL); }
+
 private:
 	GLenum m_Target;
 };
+
 

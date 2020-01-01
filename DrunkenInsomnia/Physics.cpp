@@ -7,13 +7,13 @@ Collider::Collider(Entity &a_Object, Transform &a_Transform) : Component(a_Objec
 vec3 Collider::GetPosition() const 
 {
 	std::lock_guard<std::mutex> Lock(m_Mutex);
-	return  m_Transform.GetLocal().position; 
+	return  m_Transform.getLocal().position; 
 }
 
 void Collider::SetPosition(const vec2 & a_Position)
 {
 	std::lock_guard<std::mutex> Lock(m_Mutex);
-	m_Transform.SetPosition(vec3(a_Position.x, a_Position.y, 0.0f));
+	m_Transform.setPosition(vec3(a_Position.x, a_Position.y, 0.0f));
 }
 std::string Collider::ToString() { return std::string("Collider "); }
 
@@ -55,14 +55,14 @@ bool QuadCollider::Colliding(const vec2 &a_Point, const QuadCollider &a_Quad)
 
 bool CircleCollider::Colliding(vec3 &a_Point, CircleCollider &a_Circle)
 {
-	vec3 l_Distance = a_Point - a_Circle.m_Transform.GetLocal().position;
+	vec3 l_Distance = a_Point - a_Circle.m_Transform.getLocal().position;
 	float l_Magnitude = l_Distance.magnitude();
 	return (l_Magnitude < a_Circle.m_Radius);
 }
 
 bool CircleCollider::Colliding(CircleCollider &a_Circle1, CircleCollider &a_Circle2) 
 {
-	return ((a_Circle1.m_Transform.GetLocal().position - a_Circle2.m_Transform.GetLocal().position).magnitude() < a_Circle1.m_Radius + a_Circle2.m_Radius);
+	return ((a_Circle1.m_Transform.getLocal().position - a_Circle2.m_Transform.getLocal().position).magnitude() < a_Circle1.m_Radius + a_Circle2.m_Radius);
 }
 
 

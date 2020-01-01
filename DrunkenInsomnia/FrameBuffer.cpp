@@ -133,20 +133,30 @@ ColorBufferRGBA32::~ColorBufferRGBA32() {}
 
 FrameBuffer::FrameBuffer() 
 {
-	std::lock_guard<std::mutex>Lock(m_Mutex);
-	glGenFramebuffers(1, &m_ID);
+	std::lock_guard<std::mutex>Lock(mutex);
+	glGenFramebuffers(1, &id);
 }
 
-void FrameBuffer::AddBuffer(const std::string &a_RenderBufferName, DepthBuffer &a_RenderBuffer)
+void FrameBuffer::addBuffer(const std::string &a_RenderBufferName, DepthBuffer &a_RenderBuffer)
 {
-
+	FrameBufferContext fbc(GL_DEPTH_BUFFER, id);
+	glFramebufferTexture2D(GL_DRAW_BUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, a_RenderBuffer.GetID(), 0);
+	std::lock_guard<std::mutex> Lock(mutex);
+	frameMap[a_RenderBufferName] = &a_RenderBuffer;
+	++numOfAttachments;
 }
 
-void FrameBuffer::AddBuffer(const std::string &a_RenderBufferName, RenderBuffer &a_RenderBuffer) 
+void FrameBuffer::addBuffer(const std::string &a_RenderBufferName, RenderBuffer &a_RenderBuffer) 
 {
-	FrameBufferContext fbc(GL_FRAMEBUFFER, m_ID);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_UniqueCounter.GetID(), GL_TEXTURE_2D, a_RenderBuffer.GetID(), 0);
-	std::lock_guard<std::mutex> Lock(m_Mutex);
-	FrameMap[a_RenderBufferName] = &a_RenderBuffer;
-	++m_NumOfAttachments;
+	FrameBufferContext fbc(GL_FRAMEBUFFER, id);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + numColorAttachments, GL_TEXTURE_2D, a_RenderBuffer.GetID(), 0);
+	std::lock_guard<std::mutex> Lock(mutex);
+	frameMap[a_RenderBufferName] = &a_RenderBuffer;
+	++numOfAttachments;
+	++numColorAttachments;
+}
+
+bool FrameBuffer::hasBuffer(const std::string & name)
+{
+	return frameMap.find(name) != frameMap.end();
 }

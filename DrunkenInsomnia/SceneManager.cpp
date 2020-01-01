@@ -83,16 +83,16 @@ Transform& SceneNode::GetTransform()
 
 void SceneManager::CalculateGlobalTransforms() 
 {
-	TreeTraversal(SceneNode::ROOT, SceneNode::ROOT.m_Transform.GetLocal());
+	TreeTraversal(SceneNode::ROOT, SceneNode::ROOT.m_Transform.getLocal());
 }
 
 void SceneManager::TreeTraversal(SceneNode &a_SceneNode, mat4 &a_WorldMat)
 {
-	a_SceneNode.GetTransform().SetWorld(a_SceneNode.GetParent().GetTransform().GetWorld() * a_SceneNode.GetTransform().GetLocal());
+	a_SceneNode.GetTransform().setWorld(a_SceneNode.GetParent().GetTransform().getWorld() * a_SceneNode.GetTransform().getLocal());
 
 	for (auto &it : a_SceneNode.m_Children)
 	{
 		std::lock_guard<std::mutex> lock(m_Mutex);
-		TreeTraversal(*it, a_SceneNode.GetTransform().GetWorld());
+		TreeTraversal(*it, a_SceneNode.GetTransform().getWorld());
 	}
 }

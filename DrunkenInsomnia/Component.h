@@ -10,6 +10,8 @@ public:
 	virtual ~Component() {};
 
 	virtual std::string ToString() = 0;
+
+	Entity& getEntity() { return m_Object; }
 protected:
 	Entity & m_Object;
 };

@@ -55,6 +55,9 @@
     <Filter Include="Header Files\Events">
       <UniqueIdentifier>{f35c698e-a364-4bdc-9304-0a029384eeb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\statics">
+      <UniqueIdentifier>{8b4a4e39-d1b7-45ab-96c1-2050c2f2df3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="File.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

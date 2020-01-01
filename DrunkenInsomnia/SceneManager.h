@@ -40,3 +40,4 @@ private:
 	void TreeTraversal(SceneNode &a_SceneNode, mat4 &a_WorldMat);
 	std::mutex m_Mutex;
 };
+

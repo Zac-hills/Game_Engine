@@ -13,6 +13,7 @@
 #include "FrameBuffer.h"
 #include "TaskManager.h"
 #include "File.h"
+#include "Logger.h"
 
 TaskManager tk;
 
@@ -52,8 +53,13 @@ public:
 	}
 };
 
+void tests();
+
+
 int main()
 {
+	tests();
+	LOG(10);
 	File file("./Shaders/VertexShader/FullScreenQuad.vert");
 	file.open("rb");
 	std::cout << file.getContents() << std::endl;
@@ -105,4 +111,13 @@ int main()
 		windowManager::getWindowManager().handleWindowMessages();
 	}
 	return 0;
+}
+
+void tests() 
+{
+	Entity e1;
+	Transform transform(e1);
+	mat4 mat;
+	mat.position = vec3(0,12,0);
+	transform.setLocal(mat);
 }

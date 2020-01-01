@@ -72,12 +72,13 @@ class FrameBuffer
 {
 public:
 	FrameBuffer();
-	void AddBuffer(const std::string &a_RenderBufferName, DepthBuffer &a_RenderBuffer);
-	void AddBuffer(const std::string &a_RenderBufferName, RenderBuffer &a_RenderBuffer);
+	void addBuffer(const std::string &a_RenderBufferName, DepthBuffer &a_RenderBuffer);
+	void addBuffer(const std::string &a_RenderBufferName, RenderBuffer &a_RenderBuffer);
+	bool hasBuffer(const std::string &name);
 private:
-	std::unordered_map<std::string, RenderBuffer *> FrameMap;
-	unsigned int m_ID=0;
-	unsigned int m_NumOfAttachments = 0;
-	std::mutex m_Mutex;
-	UniqueIdentifier m_UniqueCounter;
+	std::unordered_map<std::string, RenderBuffer *> frameMap;
+	unsigned int id=0;
+	unsigned int numOfAttachments = 0;
+	std::mutex mutex;
+	unsigned int numColorAttachments = 0;
 };

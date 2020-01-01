@@ -57,6 +57,7 @@
     <ClInclude Include="Interface.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="MatrixMath.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Physics.h" />
